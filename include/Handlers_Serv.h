@@ -1,3 +1,5 @@
+#ifndef HANDLERS_SERV_H_ 
+#define HANDLERS_SERV_H_
 #define _XOPEN_SOURCE 700
 #define __USE_POSIX 
 
@@ -21,3 +23,4 @@ void fin_serveur(int sig){
     unlink(FIFO1);
     unlink(FIFO2);
 } 
+#endif

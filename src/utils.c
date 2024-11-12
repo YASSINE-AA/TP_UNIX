@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdio.h>
 
 int get_number_length(int number) {
    
@@ -34,8 +34,7 @@ char* generate_random_number() {
     return random_number_str; 
 }
 
-
-char*  generate_random_number_sequence_char(int n){ 
+char* generate_random_number_sequence(int n ){
 
     char* sequence = malloc(n*2*sizeof(char));
     if(sequence == NULL) {

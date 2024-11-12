@@ -4,22 +4,26 @@ C_INC := ./include
 BUILD_DIR := ./build
 SRCS = $(C_SRC)/client.c \
        $(C_SRC)/server.c \
-       $(C_SRC)/src_cli.c \
+       $(C_SRC)/src_cli_fifo.c \
        $(C_SRC)/utils.c 
 
 OBJS = $(patsubst $(C_SRC)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 CC := gcc
 
-CFLAGS := -I$(C_INC) -c
+CFLAGS :=
 LDFLAGS := -o 
 test: $(OBJS)
+	echo "compiled succ"
 # Target to build the server executable
 Server: $(BUILD_DIR) $(C_INC)
-	$(CC)  $(BUILD_DIR)/server.o $(BUILD_DIR)/src_cli_fifo.o $(BUILD_DIR)/utils.o -o server
+	$(CC)  $(BUILD_DIR)/server.o $(BUILD_DIR)/src_cli_fifo.o $(BUILD_DIR)/utils.o -I$(C_INC) -o server
+Client: $(BUILD_DIR) $(C_INC)
+	$(CC)  $(BUILD_DIR)/client.o $(BUILD_DIR)/src_cli_fifo.o $(BUILD_DIR)/utils.o -I$(C_INC) -o client
+
 
 # Rule to compile .c files to .o files in the build directory
 $(OBJS): ./build/%.o: $(C_SRC)/%.c
-	$(CC) $(CFLGAS) $< -o $@
+	$(CC)  -I$(C_INC) -c $< -o $@
 
 # Create the build directory if it doesn't exist
 

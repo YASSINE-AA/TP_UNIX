@@ -2,7 +2,7 @@
 #include "utils.h"
 #include <signal.h>
 #include <time.h>
-
+#include <string.h>
 void handle_SIGUSR1( int sigint){ 
     printf("Got data from Server \n");
 }

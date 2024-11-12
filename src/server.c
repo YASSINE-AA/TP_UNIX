@@ -40,7 +40,7 @@ while(1) {
 
     // reponse dans fifo 2
     message* reponse = malloc(sizeof(message));
-    reponse->content = generate_random_number_sequence(question->content);
+    reponse->content = generate_random_number_sequence(atoi(question->content));
     reponse->pid = getpid();
     write_fifo(FIFO2, reponse);
     

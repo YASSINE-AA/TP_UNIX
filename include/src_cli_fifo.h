@@ -1,3 +1,5 @@
+#ifndef SRC_CLI_FIFO_H_ 
+#define SRC_CLI_FIFO_H_ 
 #include <unistd.h>
 #include <stdlib.h> 
 #include <stdio.h>
@@ -15,7 +17,7 @@ void create_fifo(char* pfifo);
 void write_fifo(char* pfifo, message* buffer); 
 void read_fifo(char* pfifo, message* buffer);
 void close_fifo(char* pfifo);
-
+#endif
 /* 
 "pid:<id> "  
 "pid:<num>"  
