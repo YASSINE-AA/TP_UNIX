@@ -1,3 +1,11 @@
 {
-    "C_Cpp.default.compilerPath": ""
+    "C_Cpp.default.compilerPath": "",
+    "files.associations": {
+        "time.h": "c",
+        "handlers_serv.h": "c",
+        "unistd.h": "c",
+        "utils.h": "c",
+        "src_cli_fifo.h": "c",
+        "signal.h": "c"
+    }
 }

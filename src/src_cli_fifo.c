@@ -26,11 +26,6 @@ void read_fifo(char* fifo ,message* buffer) {
         perror("failed reading fifo.");
         exit(1);
     } 
-    read(fd, buffer->, sizeof(buffer));
+    read(fd, buffer, sizeof(buffer));
     close(fd);
 }
-
-/* 
-"pid:<id> "  
-"pid:<num>"  
-*/ 
