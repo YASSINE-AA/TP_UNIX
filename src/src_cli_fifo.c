@@ -4,9 +4,9 @@ void create_fifo(char* pfifo){
     int st = mkfifo(pfifo,PERMISSION) ; 
     if( st == -1 ){ 
         perror("Creation failed FiFO"); 
-        exit(1); 
     }
-    printf("FiFo created: %s", pfifo); 
+    printf("FiFo created: %s\n", pfifo);
+    fflush(stdout); 
 } 
 void write_fifo(char* fifo, message* buffer)
 {

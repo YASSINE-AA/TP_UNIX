@@ -52,6 +52,10 @@ char* generate_random_number_sequence(int n ){
         if(i < n-1) strcat(sequence, " "); 
         printf("%s ",tmp); 
 
+
      }
+
+    printf("\n");
+    fflush(stdout);
     return sequence;
 }

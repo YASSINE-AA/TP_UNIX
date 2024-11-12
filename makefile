@@ -15,9 +15,9 @@ LDFLAGS := -o
 test: $(OBJS)
 	echo "compiled succ"
 # Target to build the server executable
-Server: $(BUILD_DIR) $(C_INC)
+Server: $(OBJS) $(C_INC)
 	$(CC)  $(BUILD_DIR)/server.o $(BUILD_DIR)/src_cli_fifo.o $(BUILD_DIR)/utils.o -I$(C_INC) -o server
-Client: $(BUILD_DIR) $(C_INC)
+Client: $(OBJS) $(C_INC)
 	$(CC)  $(BUILD_DIR)/client.o $(BUILD_DIR)/src_cli_fifo.o $(BUILD_DIR)/utils.o -I$(C_INC) -o client
 
 

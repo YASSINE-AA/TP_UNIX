@@ -7,10 +7,10 @@
 
 #define FIFO1 "tmp/fifo1"
 #define FIFO2 "tmp/fifo2"
-
+#define MAX_BUFF 50
 typedef struct {
     int pid;
-    char * content;
+    char content[MAX_BUFF];
 } message; 
 
 void create_fifo(char* pfifo); 

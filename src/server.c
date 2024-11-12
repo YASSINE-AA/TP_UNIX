@@ -5,8 +5,9 @@ void main_handler(int sigint) {
     if (sigint == SIGUSR1){ 
         hand_reveil(sigint); 
         return;
-    }  
+    }else if ( sigint == SIGINT){  
     fin_serveur(sigint);
+    }
 }
 
 int main (){ 
@@ -29,7 +30,8 @@ sa.sa_mask = set;
 for (int i = 1; i < _NSIG; i++) {  
     if (i != SIGKILL && i != SIGSTOP) {          
         if (sigaction(i, &sa, NULL) == -1) {
-            perror("sigaction");
+            printf("sigaction %d\n", i);
+            fflush(stdout);
         }
     }
 }
@@ -38,9 +40,12 @@ while(1) {
     message* question = malloc(sizeof(message));
     read_fifo(FIFO1, question);
 
+    printf("Got question form client %d , %s\n",question->pid,question->content);
+    fflush(stdout);
     // reponse dans fifo 2
     message* reponse = malloc(sizeof(message));
-    reponse->content = generate_random_number_sequence(atoi(question->content));
+    char* tmp = generate_random_number_sequence(atoi(question->content));
+    strncpy(reponse->content,tmp,MAX_BUFF);
     reponse->pid = getpid();
     write_fifo(FIFO2, reponse);
     
@@ -48,13 +53,15 @@ while(1) {
     kill(question->pid, SIGUSR1);
 
     // liberer
-    free(question->content);
-    free(question);
-    free(reponse->content);
-    free(reponse);
-
-    // attendre signal du client
+   
+   // attendre signal du client
     pause(); 
+    printf("Freeing Server \n");
+    fflush(stdout);
+    free(tmp);
+    free(question);
+    free(reponse);
+    
 }
 
 return 0;

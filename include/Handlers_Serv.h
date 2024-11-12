@@ -12,7 +12,8 @@
 #include <string.h>
 
 void hand_reveil(int sig) {
-   printf("Client m'a reveille!");
+   printf("Client m'a reveille!\n");
+   fflush(stdout);
 }
 
 
@@ -20,7 +21,9 @@ void hand_reveil(int sig) {
 void fin_serveur(int sig){ 
 
     printf("Goodbye Dear user, i will miss you :) \n");
+      fflush(stdout);
     unlink(FIFO1);
     unlink(FIFO2);
+   // exit(0);
 } 
 #endif
