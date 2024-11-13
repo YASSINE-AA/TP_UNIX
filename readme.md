@@ -62,27 +62,43 @@ Le test vérifie que le FIFO a été créé correctement en vérifiant son exist
 Testé avec les fonctions `write_fifo` et `read_fifo` pour vérifier que les messages envoyés par le client sont correctement reçus par le serveur.
 
 ```c
-void test_write_and_read_fifo(void) {
-    const char* test_fifo = "/tmp/test_fifo";
-    create_fifo(test_fifo);
+void* reader_thread(void* arg) {
+    message* received_msg = NULL;
+    read_fifo(FIFO1, &received_msg);  
 
+    TEST_ASSERT_EQUAL(1234, received_msg->pid);
+    TEST_ASSERT_EQUAL(5, received_msg->content_size);
+    TEST_ASSERT_EQUAL_STRING("test", received_msg->content);
+
+    free(received_msg);
+
+    return NULL;
+}
+
+void* writer_thread(void* arg) {
     message* test_msg = malloc(sizeof(message) + 5);
     test_msg->pid = 1234;
     test_msg->content_size = 5;
     strcpy(test_msg->content, "test");
 
-    write_fifo(test_fifo, test_msg);
-
-    message* received_msg = NULL;
-    read_fifo(test_fifo, &received_msg);
-
-    TEST_ASSERT_EQUAL(test_msg->pid, received_msg->pid);
-    TEST_ASSERT_EQUAL(test_msg->content_size, received_msg->content_size);
-    TEST_ASSERT_EQUAL_STRING(test_msg->content, received_msg->content);
+    write_fifo(FIFO1, test_msg); 
 
     free(test_msg);
-    free(received_msg);
-    close_fifo(test_fifo);
+
+    return NULL;
+}
+
+void test_write_and_read_fifo(void) {
+    create_fifo(FIFO1);
+
+    pthread_create(&reader_thread_id, NULL, reader_thread, NULL);
+    pthread_create(&writer_thread_id, NULL, writer_thread, NULL);
+
+    pthread_join(reader_thread_id, NULL);
+    pthread_join(writer_thread_id, NULL);
+
+    close_fifo(FIFO1);
+}
 }
 ```
 Le test vérifie que le message écrit dans le FIFO est bien lu et que les données sont correctement transmises.
