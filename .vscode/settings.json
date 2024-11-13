@@ -6,6 +6,12 @@
         "unistd.h": "c",
         "utils.h": "c",
         "src_cli_fifo.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "fcntl.h": "c",
+        "stat.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "types.h": "c",
+        "string.h": "c"
     }
 }

@@ -1,62 +1,85 @@
+#define _XOPEN_SOURCE 700
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <signal.h>
+#include "src_cli_fifo.h"
 #include "Handlers_Serv.h"
-#include <time.h>
 #include "utils.h"
-void main_handler(int sigint) { 
-    if (sigint == SIGUSR1){ 
-        hand_reveil(sigint); 
-        return;
-    }  
-    fin_serveur(sigint);
-}
 
-int main (){ 
+// Gère les signaux reçus
+void main_handler(int signum) {
+    fflush(stdout);
 
-// init 
-create_fifo(FIFO1); 
-create_fifo(FIFO2);
-
-// init random seed  
-srand(time(NULL)); 
-
-struct sigaction sa;
-sigset_t set = {0};
-sa.sa_handler = main_handler; 
-sa.sa_flags = 0;
-sigemptyset(&set);
-sa.sa_mask = set;
-
-// handle quelconque signal 
-for (int i = 1; i < _NSIG; i++) {  
-    if (i != SIGKILL && i != SIGSTOP) {          
-        if (sigaction(i, &sa, NULL) == -1) {
-            perror("sigaction");
-        }
+    if (signum == SIGUSR1) {
+        // Appelle le réveil
+        hand_reveil(signum);
+    } else {
+        // Termine le serveur
+        fin_serveur(signum);
+        fflush(stdout);
     }
 }
 
-while(1) {
-    message* question = malloc(sizeof(message));
-    read_fifo(FIFO1, question);
+int main() {
+    // Crée les canaux FIFO
+    create_fifo(FIFO1);
+    create_fifo(FIFO2);
 
-    // reponse dans fifo 2
-    message* reponse = malloc(sizeof(message));
-    reponse->content = generate_random_number_sequence(question->content);
-    reponse->pid = getpid();
-    write_fifo(FIFO2, reponse);
-    
-    // reveiller client
-    kill(question->pid, SIGUSR1);
+    // Configure SIGUSR1 signal
+    struct sigaction sa;
+    sa.sa_handler = main_handler;
+    sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
+    if (sigaction(SIGUSR1, &sa, NULL) == -1) {
+        perror("Erreur configuration SIGUSR1");
+        exit(1);
+    }
 
-    // liberer
-    free(question->content);
-    free(question);
-    free(reponse->content);
-    free(reponse);
+    printf("Serveur démarré, en attente... PID: %d\n", getpid());
 
-    // attendre signal du client
-    pause(); 
-}
+    while (1) {
+        // Lit message client
+        message* received_message = NULL;
+        read_fifo(FIFO1, &received_message);
+        printf("Message reçu du client <%d>: %s\n", received_message->pid, received_message->content);
 
-return 0;
+        // Génère une séquence aléatoire
+        char* random_sequence = generate_random_number_sequence(received_message->content);
+        size_t content_size = strlen(random_sequence) + 1;
+        
+        // Alloue et remplit message
+        message* sent_message = malloc(sizeof(message) + content_size);
+        if (!sent_message) {
+            perror("Erreur allocation mémoire\n");
+            exit(1);
+        }
 
+        sent_message->pid = getpid();
+        sent_message->content_size = content_size;
+        strcpy(sent_message->content, random_sequence);
+        printf("Envoi du message au client.\n");
+        
+        // Envoie le message
+        write_fifo(FIFO2, sent_message);
+
+        // Reveiller client
+        kill(received_message->pid, SIGUSR1);
+
+        // Libère mémoire
+        free(sent_message);
+        free(received_message);
+        free(random_sequence);
+        // Attend prochain signal
+        pause();
+    }
+
+    // Ferme les canaux FIFO
+    close_fifo(FIFO1);
+    close_fifo(FIFO2);
+    return 0;
 }

@@ -1,25 +1,57 @@
+#define _XOPEN_SOURCE 700
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <signal.h>
 #include "src_cli_fifo.h"
 #include "utils.h"
-#include <signal.h>
-#include <time.h>
 
-void handle_SIGUSR1( int sigint){ 
-    printf("Got data from Server \n");
+void main_handler(int signum) {
+    printf("Serveur m'a reveille! \n");
 }
-int main () {
-    srand(time(NULL));
-    // send 
-    signal(SIGUSR1,handle_SIGUSR1); 
-    message* msg = malloc(sizeof(message));
-    msg->pid = getpid();
-    msg->content = generate_random_number();
-    printf("sending data %d\n",msg->pid); 
-    write_fifo(FIFO1, msg); // ecrire dans fifo1
-    memset(msg, 0, sizeof(message));
-    read_fifo(FIFO2,msg);
-    printf("received data from server %d , %s\n",msg->pid,msg->content); 
-    kill(SIGUSR1,msg->pid);
-    free(msg->content);
+
+int main(int argc, char *argv[]) {
+    
+    struct sigaction sa;
+    sa.sa_handler = main_handler;
+    sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
+    if (sigaction(SIGUSR1, &sa, NULL) == -1) {
+        perror("Erreur configuration SIGUSR1");
+        exit(1);
+    }
+
+    // Construire et envoyer message
+    char* n = generate_random_number();
+    size_t content_size = strlen(n) + 1;  
+    message* msg = malloc(sizeof(message) + content_size);
+    if (!msg) {
+        perror("échec allocation mémoire");
+        exit(1);
+    }
+    msg->pid = getpid(); // Inclut le PID
+    msg->content_size = content_size; // Taille du contenu
+    strcpy(msg->content, n);  
+    write_fifo(FIFO1, msg); // Envoie à FIFO1
+
+    // Recevoir réponse du serveur
+    message* received_message = NULL;
+    read_fifo(FIFO2, &received_message);
+    printf("Reçu message du serveur: %s \n", received_message->content);
+
+    // Envoyer signal SIGUSR1 au serveur
+    printf("Envoyer signal au serveur: %d\n", received_message->pid);
+    if (kill(received_message->pid, SIGUSR1) == -1) {
+        perror("Erreur en envoyant SIGUSR1");
+    }
+
+    // Libère mémoire
+    free(received_message);
     free(msg);
     return 0;
 }
