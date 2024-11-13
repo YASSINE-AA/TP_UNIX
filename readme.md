@@ -38,9 +38,6 @@ Les signaux sont utilisés pour la synchronisation :
 - Le client envoie un signal SIGUSR1 au serveur pour l'indiquer qu'il doit traiter la demande.
 - Le serveur envoie un signal SIGUSR1 au client après avoir envoyé la réponse pour l'informer que le traitement est terminé.
 
-- **Génération de nombres aléatoires** : Le programme génère des séquences de nombres aléatoires. Le serveur génère une séquence de nombres en fonction de l'entrée du client.
-- **Gestion des erreurs** : Des mécanismes de gestion d'erreurs robustes ont été mis en place pour gérer les échecs de création de FIFO, d'allocation de mémoire et de lecture/écriture dans les fichiers FIFO.
-
 ## Tests Unitaires Implémentés
 
 Les tests unitaires sont implémentés à l'aide de la bibliothèque **Unity**. Voici les tests réalisés :
