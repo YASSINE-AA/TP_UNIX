@@ -137,6 +137,11 @@ void test_generate_random_number_sequence(void) {
 ```
 Le test vérifie que la séquence de nombres aléatoires générée a bien le nombre de valeurs spécifié et que chaque valeur est valide.
 
+## Validation des Tests
+
+<img src="tests_validated.png">
+
+
 ## Conclusion
 
 Le programme met en place une communication client-serveur basée sur des tubes FIFO et des signaux pour la gestion des processus. Des tests unitaires ont été ajoutés pour garantir la stabilité du programme, en testant la création de FIFO, l'écriture/lecture dans les FIFO, et la génération de nombres aléatoires. Les tests sont implémentés à l'aide de la bibliothèque **Unity** et permettent de valider les fonctionnalités critiques de l'application.
