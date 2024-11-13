@@ -10,7 +10,7 @@ SRCS_SERVER = $(C_SRC)/src_cli_fifo.c \
 
 SRCS_CLIENT = $(C_SRC)/client.c \
               $(C_SRC)/src_cli_fifo.c \
-              $(C_SRC)/utils.c 
+              $(C_SRC)/utils.c
 
 SRCS_TEST = $(C_TEST)/unity.c \
             $(C_TEST)/tests.c \
@@ -33,6 +33,8 @@ Client: $(BUILD_DIR) $(OBJS_CLIENT)
 
 Test: $(BUILD_DIR) $(OBJS_TEST)
 	$(CC) $(OBJS_TEST_INC) -o $(BUILD_DIR)/test $(CFLAGS)
+
+
 
 $(BUILD_DIR)/%.o: $(C_SRC)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
