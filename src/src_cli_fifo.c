@@ -8,7 +8,7 @@
 
 // Crée un FIFO et un répertoire "tmp"
 void create_fifo(const char *fifo) {
-  mkdir("tmp", 0777);
+  mkdir("./tmp", 0777);
   if (mkfifo(fifo, 0666) == -1) {
     perror("mkfifo"); // Gère les erreurs de création
   } else {

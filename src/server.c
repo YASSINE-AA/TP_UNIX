@@ -32,6 +32,7 @@ void main_handler(int signum)
 
 int main()
 {
+  
   // Crée les canaux FIFO
   create_fifo(FIFO1);
   create_fifo(FIFO2);

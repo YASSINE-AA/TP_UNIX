@@ -8,7 +8,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define FIFO1 "tmp/fifo1"
 pthread_t writer_thread_id, reader_thread_id;
 
 void setUp(void) {}
