@@ -62,7 +62,7 @@ void test_generate_random_number(void) {
   char *random_num = generate_random_number();
   TEST_ASSERT_NOT_NULL(random_num);
   int num = atoi(random_num);
-  TEST_ASSERT_TRUE(num >= 0 && num < MAX);
+  TEST_ASSERT_TRUE(num >= 1 && num < MAX);
   free(random_num);
 }
 
@@ -74,7 +74,7 @@ void test_generate_random_number_sequence(void) {
   for (char *token = strtok(sequence, " "); token != NULL;
        token = strtok(NULL, " ")) {
     int num = atoi(token);
-    TEST_ASSERT_TRUE(num >= 0 && num < MAX);
+    TEST_ASSERT_TRUE(num >= 1 && num < MAX);
     count++;
   }
   TEST_ASSERT_EQUAL(5, count);

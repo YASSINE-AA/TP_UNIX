@@ -13,5 +13,17 @@
         "stdlib.h": "c",
         "types.h": "c",
         "string.h": "c"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/yassine-ahmed-ali/Desktop/tp_unix/build",
+            "binaryPath": "/home/yassine-ahmed-ali/Desktop/tp_unix/build/test",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/yassine-ahmed-ali/Desktop/tp_unix/build",
+            "binaryPath": "/home/yassine-ahmed-ali/Desktop/tp_unix/build/client",
+            "binaryArgs": []
+        }
+    ]
 }
