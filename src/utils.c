@@ -19,7 +19,7 @@ int get_number_length(int number) {
 
 // Génère un nombre aléatoire sous forme de chaîne de caractères
 char *generate_random_number() {
-  int random_number = rand() % MAX;
+  int random_number = rand() % MAX + 1;
 
   char *random_number_str = malloc(MAX_INT_DIGITS * sizeof(char));
   if (random_number_str == NULL) {

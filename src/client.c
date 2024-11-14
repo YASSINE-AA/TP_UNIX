@@ -10,10 +10,13 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <time.h>
 
 void main_handler(int signum) { printf("Serveur m'a reveille! \n"); }
 
 int main(int argc, char *argv[]) {
+
+  srand(time(NULL));
 
   struct sigaction sa;
   sa.sa_handler = main_handler;
